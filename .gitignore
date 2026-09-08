@@ -1,0 +1,23 @@
+# Local Trilium instance data (database, session secret, logs)
+.trilium-data/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local database and logs
+*.db
+*.db-*
+*.sqlite*
+*.log

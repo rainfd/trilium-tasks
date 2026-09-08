@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#151b2c" />
+    <title>Taskline · Trilium 任务工作台</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark"><span data-icon="spark"></span></div>
+          <div class="brand-copy">
+            <strong>Taskline</strong>
+            <span>Trilium workspace</span>
+          </div>
+        </div>
+
+        <button class="workspace-switch" type="button">
+          <span class="workspace-avatar">L</span>
+          <span class="workspace-name">林的工作区</span>
+          <span class="workspace-chevron" data-icon="chevron-down"></span>
+        </button>
+
+        <nav class="primary-nav" aria-label="主导航">
+          <button class="nav-item is-active" type="button" data-view="today">
+            <span class="nav-icon" data-icon="calendar"></span>
+            <span>今日计划</span>
+            <span class="nav-count" id="today-count">4</span>
+          </button>
+          <button class="nav-item" type="button" data-view="pool">
+            <span class="nav-icon" data-icon="inbox"></span>
+            <span>任务池</span>
+            <span class="nav-count" id="pool-count">18</span>
+          </button>
+          <button class="nav-item" type="button" data-view="completed">
+            <span class="nav-icon" data-icon="check-circle"></span>
+            <span>已完成</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+        <div class="section-label">快捷入口</div>
+        <nav class="secondary-nav" aria-label="快捷入口">
+          <button class="nav-item subtle" type="button" data-view="journal">
+            <span class="nav-icon" data-icon="book"></span>
+            <span>Journal</span>
+          </button>
+          <button class="nav-item subtle" type="button" data-view="insights">
+            <span class="nav-icon" data-icon="chart"></span>
+            <span>完成统计</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="sidebar-focus-card">
+          <div class="focus-card-topline">
+            <span>今日专注</span>
+            <span class="focus-card-number" id="sidebar-progress">25%</span>
+          </div>
+          <div class="progress-track dark-track"><span id="sidebar-progress-bar" style="width: 25%"></span></div>
+          <p><strong id="sidebar-done-count">1</strong> / <span id="sidebar-total-count">4</span> 项已完成</p>
+        </div>
+
+        <button class="nav-item subtle settings-link" type="button">
+          <span class="nav-icon" data-icon="settings"></span>
+          <span>设置</span>
+        </button>
+
+        <div class="user-card">
+          <div class="user-avatar">林</div>
+          <div class="user-copy">
+            <strong>林默</strong>
+            <span>个人空间</span>
+          </div>
+          <button class="icon-button tiny" type="button" aria-label="更多选项">
+            <span data-icon="dots"></span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumbs">
+            <span>我的工作区</span>
+            <span class="breadcrumb-slash">/</span>
+            <strong id="breadcrumb-title">任务管理</strong>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button" id="focus-search" type="button" aria-label="搜索任务" title="搜索任务">
+              <span data-icon="search"></span>
+            </button>
+            <button class="icon-button notification-button" type="button" aria-label="通知">
+              <span data-icon="bell"></span>
+              <i></i>
+            </button>
+            <div class="topbar-avatar">林</div>
+          </div>
+        </header>
+
+        <div class="page-container">
+          <section class="page-intro">
+            <div class="heading-block">
+              <div class="date-navigator">
+                <button class="icon-button date-arrow" id="previous-day" type="button" aria-label="前一天">
+                  <span data-icon="chevron-left"></span>
+                </button>
+                <div>
+                  <div class="eyebrow"><span class="live-dot"></span><span id="date-label">今天</span></div>
+                  <h1 id="page-title">今日计划</h1>
+                </div>
+                <button class="icon-button date-arrow" id="next-day" type="button" aria-label="后一天">
+                  <span data-icon="chevron-right"></span>
+                </button>
+              </div>
+              <p id="page-subtitle">把注意力留给最重要的几件事。</p>
+            </div>
+            <div class="intro-actions">
+              <button class="button button-secondary" id="open-journal" type="button">
+                <span data-icon="book"></span>
+                打开 Journal
+              </button>
+              <button class="button button-primary" id="open-task-dialog" type="button">
+                <span data-icon="plus"></span>
+                新建任务
+              </button>
+            </div>
+          </section>
+
+          <section class="stats-grid" aria-label="任务概览">
+            <article class="stat-card stat-card-purple">
+              <div class="stat-icon"><span data-icon="target"></span></div>
+              <div class="stat-copy">
+                <span class="stat-label">今日进度</span>
+                <strong id="stat-progress">1 / 4</strong>
+                <span class="stat-hint positive" id="stat-progress-hint">继续保持节奏</span>
+              </div>
+              <div class="stat-ring" id="stat-ring" style="--progress: 25%"><span id="stat-percent">25%</span></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-orange"><span data-icon="inbox"></span></div>
+              <div class="stat-copy">
+                <span class="stat-label">任务池</span>
+                <strong id="stat-pool">18</strong>
+                <span class="stat-hint">件待安排任务</span>
+              </div>
+              <span class="stat-trend"><span data-icon="arrow-up"></span> 3</span>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-icon-green"><span data-icon="flame"></span></div>
+              <div class="stat-copy">
+                <span class="stat-label">专注连续</span>
+                <strong>6 天</strong>
+                <span class="stat-hint">比上周多 2 天</span>
+              </div>
+              <div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i class="muted"></i></div>
+            </article>
+          </section>
+
+          <section class="content-grid">
+            <article class="panel today-panel">
+              <header class="panel-header">
+                <div>
+                  <div class="panel-kicker">FOCUS LIST</div>
+                  <div class="panel-title-row">
+                    <h2>今天要做</h2>
+                    <span class="count-pill" id="today-total">4 项</span>
+                  </div>
+                </div>
+                <button class="icon-button" id="today-menu" type="button" aria-label="今日计划菜单">
+                  <span data-icon="dots"></span>
+                </button>
+              </header>
+
+              <div class="focus-banner">
+                <div class="focus-banner-icon"><span data-icon="spark"></span></div>
+                <div>
+                  <strong>建议先完成一项高优任务</strong>
+                  <span>今天还剩 <b id="available-time">3 小时 20 分</b> 可安排</span>
+                </div>
+                <button type="button" class="text-button" id="suggest-task">查看建议 <span data-icon="chevron-right"></span></button>
+              </div>
+
+              <div class="task-list" id="today-list" aria-live="polite"></div>
+
+              <button class="add-inline-button" id="add-inline" type="button">
+                <span data-icon="plus"></span>
+                添加到今天
+              </button>
+            </article>
+
+            <aside class="panel journal-panel">
+              <header class="panel-header journal-panel-header">
+                <div>
+                  <div class="panel-kicker">TRILIUM JOURNAL</div>
+                  <h2>日记同步</h2>
+                </div>
+                <button class="icon-button" id="journal-more" type="button" aria-label="Journal 菜单">
+                  <span data-icon="dots"></span>
+                </button>
+              </header>
+
+              <div class="journal-note-card">
+                <div class="journal-note-top">
+                  <div class="journal-note-icon"><span data-icon="book"></span></div>
+                  <div>
+                    <span class="journal-note-label">JOURNAL NOTE</span>
+                    <h3 id="journal-note-title">今天 · <span class="journal-date"></span></h3>
+                  </div>
+                  <span class="linked-status"><span data-icon="link"></span> 已连接</span>
+                </div>
+                <div class="journal-note-preview">
+                  <span class="quote-mark">“</span>
+                  <p>给重要的事情留出一段完整的时间。</p>
+                </div>
+                <div class="journal-note-meta">
+                  <span><span data-icon="clock"></span> 最后编辑 09:24</span>
+                  <button class="link-button" id="open-note" type="button">在 Trilium 中打开 <span data-icon="arrow-up-right"></span></button>
+                </div>
+              </div>
+
+              <div class="journal-sync-summary">
+                <div class="sync-summary-title"><span>今日任务</span><strong id="journal-task-summary">1 / 4 已完成</strong></div>
+                <div class="progress-track"><span id="journal-progress-bar" style="width: 25%"></span></div>
+              </div>
+
+              <div class="journal-note-footer">
+                <span class="sync-dot"></span>
+                <span>任务完成状态会自动回写任务池</span>
+              </div>
+            </aside>
+          </section>
+
+          <section class="panel pool-panel">
+            <header class="pool-header">
+              <div>
+                <div class="panel-kicker">ALL TASKS</div>
+                <div class="panel-title-row">
+                  <h2>任务池</h2>
+                  <span class="count-pill count-pill-muted" id="pool-total">18 件</span>
+                </div>
+              </div>
+              <div class="pool-actions">
+                <label class="search-box" for="task-search">
+                  <span data-icon="search"></span>
+                  <input id="task-search" type="search" placeholder="搜索任务" autocomplete="off" />
+                  <kbd>⌘ K</kbd>
+                </label>
+                <button class="button button-quiet" id="filter-button" type="button">
+                  <span data-icon="filter"></span>
+                  筛选
+                </button>
+              </div>
+            </header>
+
+            <div class="pool-toolbar">
+              <div class="filter-tabs" role="tablist" aria-label="任务筛选">
+                <button class="filter-tab is-active" type="button" data-filter="all">全部</button>
+                <button class="filter-tab" type="button" data-filter="inbox">待安排</button>
+                <button class="filter-tab" type="button" data-filter="high">高优先级</button>
+                <button class="filter-tab" type="button" data-filter="done">已完成</button>
+              </div>
+              <button class="sort-button" type="button" id="sort-button"><span data-icon="sort"></span> 最近创建 <span data-icon="chevron-down"></span></button>
+            </div>
+
+            <div class="pool-list" id="pool-list" aria-live="polite"></div>
+            <button class="load-more" type="button" id="load-more">显示更多任务 <span data-icon="chevron-down"></span></button>
+          </section>
+
+          <footer class="page-footer">
+            <span><span class="footer-status-dot"></span> 已保存到 Trilium</span>
+            <span>Taskline UI prototype <b>v0.1</b></span>
+          </footer>
+        </div>
+      </main>
+    </div>
+
+    <dialog class="task-dialog" id="task-dialog">
+      <form id="task-form">
+        <div class="dialog-header">
+          <div>
+            <div class="panel-kicker">NEW TASK</div>
+            <h2>创建一个任务</h2>
+          </div>
+          <button class="icon-button" id="close-task-dialog" type="button" aria-label="关闭">
+            <span data-icon="close"></span>
+          </button>
+        </div>
+        <div class="form-body">
+          <label class="form-field form-field-wide">
+            <span>任务名称 <b>*</b></span>
+            <input id="task-title" name="title" type="text" placeholder="例如：整理本周项目进展" required />
+          </label>
+          <div class="form-grid">
+            <label class="form-field">
+              <span>所属项目</span>
+              <input id="task-project" name="project" type="text" placeholder="例如：Trilium 插件" />
+            </label>
+            <label class="form-field">
+              <span>优先级</span>
+              <select id="task-priority" name="priority">
+                <option value="urgent">紧急 · P0</option>
+                <option value="high" selected>高 · P1</option>
+                <option value="medium">中 · P2</option>
+                <option value="low">低 · P3</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-grid">
+            <label class="form-field">
+              <span>预计用时</span>
+              <select id="task-estimate" name="estimate">
+                <option value="15">15 分钟</option>
+                <option value="30" selected>30 分钟</option>
+                <option value="45">45 分钟</option>
+                <option value="60">1 小时</option>
+                <option value="120">2 小时</option>
+              </select>
+            </label>
+            <div class="form-field form-field-switch">
+              <span>计划</span>
+              <label class="switch-row">
+                <input id="plan-today" name="planToday" type="checkbox" checked />
+                <span class="switch-control"></span>
+                <span>加入<span id="plan-date-label">今天</span>计划</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="dialog-footer">
+          <button class="button button-secondary" id="cancel-task-dialog" type="button">取消</button>
+          <button class="button button-primary" type="submit"><span data-icon="plus"></span>创建任务</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="detail-dialog" id="detail-dialog">
+      <div id="detail-content"></div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span class="toast-icon" data-icon="check-circle"></span>
+      <span id="toast-message">已更新</span>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
