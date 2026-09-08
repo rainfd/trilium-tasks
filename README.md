@@ -7,17 +7,27 @@ Taskline 目前提供两种形态：
 - **独立 UI 原型**：无需构建工具，直接在浏览器中体验完整交互。
 - **TriliumNext Widget**：以 JSX/Preact Code Note 的方式运行，读取 `#task` 笔记，并将计划与当天 Journal 关联。
 
-## 效果图
+## Trilium 中的实际效果
 
-### 今日计划与 Journal 同步
+以下截图来自 **TriliumNext v0.105**：Taskline Widget 已安装为 JSX/Preact Custom Widget，并在带有 `#taskDashboard` 标签的笔记中运行。左侧笔记树、顶部编辑器工具栏和 Dashboard 标签页均为 Trilium 原生界面。
 
-![Taskline 今日计划](docs/images/proto-1600.png)
+### 今日计划与 Trilium 工作区
 
-### 任务池
+![Trilium 中的 Taskline 今日计划](docs/images/trilium-widget.png)
 
-![Taskline 任务池](docs/images/proto-pool-crop.png)
+### Trilium 中的任务池
 
-更多尺寸的预览图位于 [`docs/images/`](docs/images/)。
+![Trilium 中的 Taskline 任务池](docs/images/trilium-widget-pool.png)
+
+## 独立 UI 原型预览
+
+下面的图片仅用于展示独立浏览器原型的视觉方案，不代表 Trilium 内嵌效果：
+
+![Taskline 独立原型](docs/images/proto-1600.png)
+
+![Taskline 独立原型任务池](docs/images/proto-pool-crop.png)
+
+更多预览图位于 [`docs/images/`](docs/images/)。
 
 ## 功能
 
