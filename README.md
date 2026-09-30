@@ -51,6 +51,9 @@ Taskline 目前提供两种形态：
 - 任务正文直接使用 Trilium 笔记内容
 - 通过 `taskStatus`、`taskPriority`、`taskPlannedDate` 等标签保存任务状态
 - 加入计划时，在当天 Journal 中维护任务表格与任务链接
+- **自动顺延**：打开 Dashboard 时，把未完成且计划日期已过期的任务搬到今天的计划
+- **删除任务**：直接从列表删除任务笔记，并清理它在 Journal 中留下的任务行
+- **顺延来源显示**：已顺延的任务在今日计划中显示「从 X 顺延」
 - 使用左侧 Launchbar 一键打开 Dashboard
 - 没有任务池时自动回退到演示数据
 
@@ -141,9 +144,28 @@ docker compose down
 #taskPlannedDate=2025-01-15
 #taskEstimate=30
 #taskProject=Trilium 插件
+#taskInheritedFrom=2025-01-15
+#taskCompletedAt=2025-01-16T09:30:00.000Z
 ```
 
 任务正文就是任务描述。Taskline 会通过 `plannedIn` relation 将计划任务关联到当天 Journal。
+
+`taskInheritedFrom` 记录任务**最早**的计划日期，只写入一次，之后顺延不会覆盖它；它的存在表示这个任务是被顺延过来的，而不是新建的。`taskCompletedAt` 在勾选完成时写入，用于判断任务是否已结束。
+
+### 自动顺延
+
+打开带 `#taskDashboard` 的笔记时，Taskline 会把**未完成**、且满足以下任一条件的任务视为「过期」：
+
+- `taskPlannedDate` 早于今天；
+- `plannedIn` relation 仍指向今天以外的旧 Journal。
+
+这些任务会被自动搬到今天的计划：`taskPlannedDate` 更新为今天，`plannedIn` 改指向今天的 Journal，旧 Journal 中的任务行状态标记为「已顺延」以保留历史，今天的 Journal 中补齐任务行；首次顺延时写入 `taskInheritedFrom`。只有 `status != done` 的任务会被顺延，每天最多尝试一次，完成后提示「已自动顺延 N 个未完成任务到今天」。
+
+自动顺延依赖 **Backend Script**（见下文），未启用时只展示、不搬迁。
+
+### 删除任务
+
+点击任务行上的删除按钮可直接删除任务：删除前会弹确认框；删除时清理该任务在所有 `plannedIn` 指向的 Journal 中留下的任务行，任务表格变空时一并移除表头，最后删除任务笔记本身。该操作不可恢复，且同样依赖 **Backend Script**。
 
 ## 项目结构
 
